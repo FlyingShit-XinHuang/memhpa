@@ -1,0 +1,27 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;hpa&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../../go/src/golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/k8s.io" />
+      <root url="file://$PROJECT_DIR$/../admin-console" />
+      <root url="file://$PROJECT_DIR$/../api-server" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/hpa" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/github.com" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/foo" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../../go/src/golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/k8s.io" />
+      <root url="file://$PROJECT_DIR$/../admin-console" />
+      <root url="file://$PROJECT_DIR$/../api-server" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/hpa" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/github.com" />
+      <root url="file://$PROJECT_DIR$/../../../../go/src/foo" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>

@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tenx-hpa-dev
+  namespace: kube-system
+  labels:
+    name: tenx-hpa-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: tenx-hpa-dev
+  template:
+    metadata:
+      labels:
+        name: tenx-hpa-dev
+    spec:
+      containers:
+      - image: 192.168.1.113/huangxin/tenx-hpa-dev
+        command: ["go", "run", "hpa.go"]
+        name: hpa-controller
+        imagePullPolicy: Always
