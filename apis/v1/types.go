@@ -7,6 +7,7 @@ import (
 )
 
 type MemHPAScaler struct {
+	unversioned.TypeMeta `json:",inline"`
 	v1.ObjectMeta `json:"metadata,omitempty"`
 	Spec MemHPASpec `json:"spec,omitempty"`
 	Status MemHPAScalerStatus `json:"status,omitempty"`
@@ -25,4 +26,10 @@ type MemHPAScalerStatus struct {
 	CurrentReplicas int32 `json:"currentReplicas"`
 	DesiredReplicas int32 `json:"desiredReplicas"`
 	CurrentUtilizationPercentage *int32 `json:"currentCPUUtilizationPercentage,omitempty"`
+}
+
+type MemHPAScalerList struct {
+	unversioned.TypeMeta `json:",inline"`
+	unversioned.ListMeta `json:"metadata,omitempty"`
+	Items []MemHPAScaler `json:"items"`
 }

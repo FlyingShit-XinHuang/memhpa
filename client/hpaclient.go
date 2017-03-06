@@ -1,13 +1,18 @@
 package client
 
-//import (
+import (
 //	"k8s.io/client-go/1.4/kubernetes"
-//)
-//
-//type MemHPAGetter interface {
-//	Scalers(namespace string) MemHPAScalerInterface
-//}
-//
-//type MemHPAScalerInterface interface {
-//	Create()
-//}
+	"k8s.io/client-go/1.4/rest"
+)
+
+type ScalingClient struct {
+	*rest.RESTClient
+}
+
+func New(c *rest.RESTClient) *ScalingClient {
+	return &ScalingClient{c}
+}
+
+func (c *ScalingClient) Scalers(namespace string) MemHPAScalerInterface {
+	return newMemHPAScalers(c, namespace)
+}

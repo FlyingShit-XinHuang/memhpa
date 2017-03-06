@@ -5,7 +5,6 @@
       <root url="file://$PROJECT_DIR$/../../../../go/src/k8s.io" />
       <root url="file://$PROJECT_DIR$/../admin-console" />
       <root url="file://$PROJECT_DIR$/../api-server" />
-      <root url="file://$PROJECT_DIR$/../../../../go/src/hpa" />
       <root url="file://$PROJECT_DIR$/../../../../go/src/gopkg.in" />
       <root url="file://$PROJECT_DIR$/../../../../go/src/github.com" />
       <root url="file://$PROJECT_DIR$/../../../../go/src/foo" />
@@ -15,7 +14,6 @@
       <root url="file://$PROJECT_DIR$/../../../../go/src/k8s.io" />
       <root url="file://$PROJECT_DIR$/../admin-console" />
       <root url="file://$PROJECT_DIR$/../api-server" />
-      <root url="file://$PROJECT_DIR$/../../../../go/src/hpa" />
       <root url="file://$PROJECT_DIR$/../../../../go/src/gopkg.in" />
       <root url="file://$PROJECT_DIR$/../../../../go/src/github.com" />
       <root url="file://$PROJECT_DIR$/../../../../go/src/foo" />
