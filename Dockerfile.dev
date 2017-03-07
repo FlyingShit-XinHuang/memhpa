@@ -1,7 +1,7 @@
 FROM 192.168.1.113/tenxcloud/go:1.7-dev
 
-WORKDIR $GOPATH/src/hpa
+WORKDIR $GOPATH/src/memhpa
 
-ADD . $GOPATH/src/hpa
+ADD . $GOPATH/src/memhpa
 
 CMD ["tail -f /dev/null"]

@@ -1,0 +1,3 @@
+*.exe
+Makefile*
+k8s-compose/

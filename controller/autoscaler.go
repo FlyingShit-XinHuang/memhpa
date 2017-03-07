@@ -17,8 +17,8 @@ package controller
 //	controller *cache.Controller
 //}
 //
-//func NewHorizontalController(evtNamespacer v1core.EventsGetter, scaleNamespacer unversionedextensions.ScalesGetter,
-//	hpaNamespacer hpaclient.HorizontalPodAutoscalersGetter, replicaCalc *ReplicaCalculator,
+//func NewHPAController(evtNamespacer v1core.EventsGetter, scaleNamespacer unversionedextensions.ScalesGetter,
+//	hpaNamespacer hpaclient.MemHPAScalersGetter, replicaCalc *ReplicaCalculator,
 //	resyncPeriod time.Duration) *HorizontalController {
 //
 //}

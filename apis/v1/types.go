@@ -6,7 +6,14 @@ import (
 	"k8s.io/client-go/1.4/pkg/api/unversioned"
 )
 
-type MemHPAScaler struct {
+const (
+	MemHPAResourcesGroup = "tenxcloud.com"
+	MemHPAResourcesName = "memhpas"
+	MemHPAResourcesVersion = "v1"
+	MemHPAResourcesMetaName = "mem-hpa.tenxcloud.com"
+)
+
+type MemHpa struct {
 	unversioned.TypeMeta `json:",inline"`
 	v1.ObjectMeta `json:"metadata,omitempty"`
 	Spec MemHPASpec `json:"spec,omitempty"`
@@ -28,8 +35,8 @@ type MemHPAScalerStatus struct {
 	CurrentUtilizationPercentage *int32 `json:"currentCPUUtilizationPercentage,omitempty"`
 }
 
-type MemHPAScalerList struct {
+type MemHpaList struct {
 	unversioned.TypeMeta `json:",inline"`
 	unversioned.ListMeta `json:"metadata,omitempty"`
-	Items []MemHPAScaler `json:"items"`
+	Items []MemHpa `json:"items"`
 }
