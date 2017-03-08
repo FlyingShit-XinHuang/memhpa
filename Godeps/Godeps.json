@@ -70,6 +70,15 @@
 			"Rev": "1b00554d822231195d1babd97ff4a781231955c9"
 		},
 		{
+			"ImportPath": "github.com/prometheus/client_golang/api/prometheus",
+			"Comment": "v0.8.0",
+			"Rev": "c5b7fccd204277076155f10851dad72b76a49317"
+		},
+		{
+			"ImportPath": "github.com/prometheus/common/model",
+			"Rev": "49fee292b27bfff7f354ee0f64e1bc4850462edf"
+		},
+		{
 			"ImportPath": "github.com/spf13/pflag",
 			"Rev": "9ff6c6923cfffbcd502984b8e0c80539a94968b7"
 		},
@@ -79,6 +88,10 @@
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
+			"Rev": "cfae461cedfdcab6e261a26eb77db53695623303"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context/ctxhttp",
 			"Rev": "cfae461cedfdcab6e261a26eb77db53695623303"
 		},
 		{
