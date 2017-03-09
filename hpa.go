@@ -36,13 +36,16 @@ func main() {
 	}
 
 	// // test client set
-	//pods, err := cs.Pods("kube-system").List(api.ListOptions{})
+	//pod, err := cs.Pods("kube-system").Get("kube-dns-2543703245-84jns")
 	//if nil != err {
 	//	glog.Errorf("Failed to fetch pods: %#v\n", err)
 	//	return
 	//}
-	//
-	//glog.Infof("number of pods in kube-system: %v\n", len(pods.Items))
+	//glog.Infof("container %s of pod memory limit bytes: %d\n",
+	//	pod.Spec.Containers[0].Name,
+	//	pod.Spec.Containers[0].Resources.Limits[v1.ResourceMemory].Value(),
+	//)
+
 
 	if err := app.CreateMemHPAResourceGroup(cs.Extensions()); nil != err {
 		glog.Errorf("Failed to create mem-hpa resource: %#v\n", err)
