@@ -48,7 +48,7 @@ func (r *ReplicaCalculator) GetReplicas(currentReplicas int32, targetUtilization
 	}
 
 	limits := make(map[string]int64, len(podsList.Items))
-	// because metrics could contain pods of other pod controllers with similar name
+	// Because metrics could contain pods of other pod controllers with similar name,
 	// so validMetrics is used to filter metrics of invalid pods.
 	validMetrics := make(map[string]int64)
 	unreadyPods := sets.NewString()
@@ -71,7 +71,7 @@ func (r *ReplicaCalculator) GetReplicas(currentReplicas int32, targetUtilization
 			continue
 		}
 
-		m, found := metrics[p.Name];
+		m, found := metrics[p.Name]
 		if !found {
 			missingPods.Insert(p.Name)
 			continue
@@ -99,12 +99,12 @@ func (r *ReplicaCalculator) GetReplicas(currentReplicas int32, targetUtilization
 		// if some metrics are missed
 		if ratio > 1.0 {
 			for name := range missingPods{
-				// set metrics to be 0 to see whether it should still be scaled up
+				// set metrics 0 to see whether it should still be scaled up
 				validMetrics[name] = 0
 			}
 		} else if ratio < 1.0 {
 			for name := range missingPods {
-				// set metrics to be limit setting to see whether it should still be scaled down
+				// set metrics the limit setting to see whether it should still be scaled down
 				validMetrics[name] = limits[name]
 			}
 		}

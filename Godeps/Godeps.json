@@ -57,6 +57,10 @@
 			"Rev": "23def4e6c14b4da8ac2ed8007337bc5eb5007998"
 		},
 		{
+			"ImportPath": "github.com/golang/groupcache/lru",
+			"Rev": "72d04f9fcdec7d3821820cc4a6f150eae553639a"
+		},
+		{
 			"ImportPath": "github.com/google/gofuzz",
 			"Rev": "44d81051d367757e1c7c6a5a86423ece9afcf63c"
 		},
@@ -495,6 +499,11 @@
 			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
 		},
 		{
+			"ImportPath": "k8s.io/client-go/1.4/pkg/third_party/forked/golang/json",
+			"Comment": "v1.4.0",
+			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
+		},
+		{
 			"ImportPath": "k8s.io/client-go/1.4/pkg/third_party/forked/golang/reflect",
 			"Comment": "v1.4.0",
 			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
@@ -595,6 +604,11 @@
 			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
 		},
 		{
+			"ImportPath": "k8s.io/client-go/1.4/pkg/util/strategicpatch",
+			"Comment": "v1.4.0",
+			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
+		},
+		{
 			"ImportPath": "k8s.io/client-go/1.4/pkg/util/uuid",
 			"Comment": "v1.4.0",
 			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
@@ -640,12 +654,22 @@
 			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
 		},
 		{
+			"ImportPath": "k8s.io/client-go/1.4/tools/cache",
+			"Comment": "v1.4.0",
+			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
+		},
+		{
 			"ImportPath": "k8s.io/client-go/1.4/tools/clientcmd/api",
 			"Comment": "v1.4.0",
 			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
 		},
 		{
 			"ImportPath": "k8s.io/client-go/1.4/tools/metrics",
+			"Comment": "v1.4.0",
+			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
+		},
+		{
+			"ImportPath": "k8s.io/client-go/1.4/tools/record",
 			"Comment": "v1.4.0",
 			"Rev": "3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09"
 		},

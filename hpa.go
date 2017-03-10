@@ -4,11 +4,11 @@ import (
 	"github.com/golang/glog"
 
 	"github.com/prometheus/client_golang/api/prometheus"
-	"github.com/prometheus/common/model"
+	//"github.com/prometheus/common/model"
 
 	"k8s.io/client-go/1.4/rest"
 	"k8s.io/client-go/1.4/kubernetes"
-	//"k8s.io/client-go/1.4/pkg/api"
+	"k8s.io/client-go/1.4/pkg/api"
 
 	"flag"
 	"fmt"
@@ -16,8 +16,11 @@ import (
 	"time"
 
 	"memhpa/app"
-	//"memhpa/client"
+	"memhpa/client"
 	_ "memhpa/apis/install" // register custom resources group
+	"memhpa/controller"
+	"memhpa/controller/metrics"
+	"github.com/prometheus/common/model"
 )
 
 func main() {
@@ -43,7 +46,7 @@ func main() {
 	//}
 	//glog.Infof("container %s of pod memory limit bytes: %d\n",
 	//	pod.Spec.Containers[0].Name,
-	//	pod.Spec.Containers[0].Resources.Limits[v1.ResourceMemory].Value(),
+	//	pod.Spec.Containers[0].Resources.Limits[api.ResourceMemory].Value(),
 	//)
 
 
@@ -52,22 +55,22 @@ func main() {
 		return
 	}
 
-	//scaleClient, err := client.NewForConfig(config)
-	//if nil != err {
-	//	glog.Errorf("Failed to init hpa scale client: %#v\n", err)
-	//	return
-	//}
-	//
-	//scalers, err := scaleClient.Scalers("huangxin").List(api.ListOptions{})
-	//if nil != err {
-	//	glog.Errorf("Failed to get scalers: %#v\n", err)
-	//	return
-	//}
-	//glog.Infof("Numbers of hpa scalers in namespace huangxin: %d\n", len(scalers.Items))
+	scaleClient, err := client.NewForConfig(config)
+	if nil != err {
+		glog.Errorf("Failed to init hpa scale client: %#v\n", err)
+		return
+	}
+
+	scalers, err := scaleClient.Scalers("huangxin").List(api.ListOptions{})
+	if nil != err {
+		glog.Errorf("Failed to get scalers: %#v\n", err)
+		return
+	}
+	glog.Infof("Numbers of hpa scalers in namespace huangxin: %d\n", len(scalers.Items))
 
 	promSvcName := "prometheus-monitor"
 	namespace := "kube-system"
-	port := "9090"
+	port := 9090
 	addr := fmt.Sprintf("http://%s.%s:%s", promSvcName, namespace, port)
 	promConf := prometheus.Config{
 		Address: addr,
@@ -102,4 +105,12 @@ func main() {
 	default:
 		glog.Errorf("Error result type: %v\n", value.Type())
 	}
+
+	metricsClient, err := metrics.NewInClusterPromClient("http", namespace, promSvcName, port)
+	if nil != err {
+		glog.Errorf("Failed to init metrics client: %#v\n", err)
+		return
+	}
+
+	controller.NewHPAController(cs.Core(), cs.Extensions(), scaleClient, controller.NewReplicaCalculator(metricsClient, cs.Core()), time.Minute)
 }

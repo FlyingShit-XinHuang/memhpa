@@ -22,7 +22,7 @@ type InClusterPromClient struct {
 }
 
 // Get new client to access Prometheus with specified scheme, namsespace, name and port of Prometheus Service in k8s cluster
-func NewInClusterPromClient(scheme, svcNamespace, svcName, string, port int) (MetricsClient, error) {
+func NewInClusterPromClient(scheme, svcNamespace, svcName string, port int) (MetricsClient, error) {
 	promConf := prometheus.Config{
 		Address: fmt.Sprintf("%s://%s.%s:%d", scheme, svcName, svcNamespace, port),
 	}
@@ -62,7 +62,7 @@ func (c *InClusterPromClient) GetMemMetric(refNamespace, refName string) (PodRes
 			glog.V(2).Infof("Memory usage of container %s of pod %s: %v\n",
 				s.Metric["container_name"], s.Metric["pod_name"], s.Value)
 			// sum up memory of all containers of each pod
-			info[s.Metric["pod_name"]] += int64(s.Value)
+			info[string(s.Metric["pod_name"])] += int64(s.Value)
 		}
 		return info, vector[0].Timestamp.Time(), nil
 	default:
