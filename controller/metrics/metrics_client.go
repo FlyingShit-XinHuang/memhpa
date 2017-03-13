@@ -36,6 +36,14 @@ func NewInClusterPromClient(scheme, svcNamespace, svcName string, port int) (Met
 	}, nil
 }
 
+func NewInClusterPromClientOrDie(scheme, svcNamespace, svcName string, port int) MetricsClient {
+	client, err := NewInClusterPromClient(scheme, svcNamespace, svcName, port)
+	if nil != err {
+		panic(err)
+	}
+	return client
+}
+
 func (c *InClusterPromClient) GetMemMetric(refNamespace, refName string) (PodResourceInfo, time.Time, error) {
 	query := fmt.Sprintf(
 		`avg_over_time(

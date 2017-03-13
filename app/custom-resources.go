@@ -34,6 +34,12 @@ func CreateMemHPAResourceGroup(getter v1beta1.ThirdPartyResourcesGetter) error {
 	return nil
 }
 
+func CreateMemHPAResourceGroupOrDie(getter v1beta1.ThirdPartyResourcesGetter) {
+	if err := CreateMemHPAResourceGroup(getter); nil != err {
+		panic(err)
+	}
+}
+
 func newCustomResource() *v1beta1types.ThirdPartyResource {
 	return &v1beta1types.ThirdPartyResource{
 		ObjectMeta: v1types.ObjectMeta{

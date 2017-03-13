@@ -7,13 +7,16 @@ import (
 	"k8s.io/client-go/1.4/pkg/api"
 
 	"memhpa/apis/v1"
+	_ "memhpa/apis/install" // register custom resources group
+
+	"github.com/golang/glog"
 )
 
 type ScalingClient struct {
 	*rest.RESTClient
 }
 
-func  NewForConfig(c *rest.Config) (*ScalingClient, error) {
+func NewForConfig(c *rest.Config) (*ScalingClient, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -23,6 +26,15 @@ func  NewForConfig(c *rest.Config) (*ScalingClient, error) {
 		return nil, err
 	}
 	return &ScalingClient{client}, nil
+}
+
+func NewForConfigOrDie(c *rest.Config) *ScalingClient {
+	client, err := NewForConfig(c)
+	if nil != err {
+		glog.Errorf("Failed to init scaling client: %#v\n", err)
+		panic(err)
+	}
+	return client
 }
 
 func (c *ScalingClient) Scalers(namespace string) MemHPAScalerInterface {

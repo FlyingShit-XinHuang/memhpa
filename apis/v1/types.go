@@ -32,7 +32,7 @@ type MemHPAScalerStatus struct {
 	LastScaleTime *unversioned.Time `json:"lastScaleTime,omitempty"`
 	CurrentReplicas int32 `json:"currentReplicas"`
 	DesiredReplicas int32 `json:"desiredReplicas"`
-	CurrentUtilizationPercentage *int32 `json:"currentCPUUtilizationPercentage,omitempty"`
+	CurrentUtilizationPercentage int32 `json:"currentCPUUtilizationPercentage"`
 }
 
 type MemHpaList struct {

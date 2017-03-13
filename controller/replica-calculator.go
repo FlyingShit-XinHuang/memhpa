@@ -27,6 +27,7 @@ func NewReplicaCalculator(mc metrics.MetricsClient, pg v1.PodsGetter) *ReplicaCa
 	return &ReplicaCalculator{metricsClient: mc, podsGetter: pg}
 }
 
+// return replicas, utilization, timestamp, error
 func (r *ReplicaCalculator) GetReplicas(currentReplicas int32, targetUtilization int32, namespace, name string,
 	selector labels.Selector) (int32, int32, time.Time, error) {
 
@@ -82,6 +83,8 @@ func (r *ReplicaCalculator) GetReplicas(currentReplicas int32, targetUtilization
 	if 1 > len(validMetrics) {
 		return 0, 0, nilTime, fmt.Errorf("No valid metrics found")
 	}
+	glog.V(2).Infof("limits: %v; validMetrics: %v; targetUtilization: %v\n",
+		limits, validMetrics, targetUtilization)
 	ratio, utilization, validCount := getRatioAndUtilization(limits, validMetrics, targetUtilization)
 
 	rebalanceUnready := unreadyPods.Len() > 0 && ratio > 1.0
@@ -114,10 +117,12 @@ func (r *ReplicaCalculator) GetReplicas(currentReplicas int32, targetUtilization
 		glog.V(2).Infof("Rebalance pods %v\n", unreadyPods)
 		for name := range unreadyPods {
 			// set metrics to be 0 to see whether it should still be scaled up
-			metrics[name] = 0
+			validMetrics[name] = 0
 		}
 	}
 
+	glog.V(2).Infof("limits: %v; rebalanced validMetrics: %v; targetUtilization: %v\n",
+		limits, validMetrics, targetUtilization)
 	rebalancedRatio, _, validCount := getRatioAndUtilization(limits, validMetrics, targetUtilization)
 	if isChangeSmall(rebalancedRatio) || (ratio > 1.0 && rebalancedRatio < 1.0) ||
 		(ratio < 1.0 && rebalancedRatio > 1.0) {
@@ -162,5 +167,6 @@ func getRatioAndUtilization(limits, metrics map[string]int64, target int32) (flo
 	}
 
 	utilization := int32((metricsTotal * 100) / limitsTotal)
+	glog.V(2).Infof("utilization: %d, validCount: %d", utilization, validCount)
 	return float64(utilization) / float64(target), utilization, validCount
 }
