@@ -48,7 +48,7 @@ func (s *memHPAScalers) Update(scaler *v1.MemHpa) (*v1.MemHpa, error) {
 	err := s.client.Put().
 		Namespace(s.ns).
 		Resource(v1.MemHPAResourcesName).
-		Name(scaler.Name).
+		Name(scaler.MetaData.Name).
 		Body(scaler).
 		Do().
 		Into(result)

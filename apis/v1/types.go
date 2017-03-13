@@ -4,6 +4,8 @@ import (
 	"k8s.io/client-go/1.4/pkg/api/v1"
 	autoscaling "k8s.io/client-go/1.4/pkg/apis/autoscaling/v1"
 	"k8s.io/client-go/1.4/pkg/api/unversioned"
+	"k8s.io/client-go/1.4/pkg/api/meta"
+	"encoding/json"
 )
 
 const (
@@ -15,7 +17,7 @@ const (
 
 type MemHpa struct {
 	unversioned.TypeMeta `json:",inline"`
-	v1.ObjectMeta `json:"metadata,omitempty"`
+	MetaData v1.ObjectMeta `json:"metadata,omitempty"`
 	Spec MemHPASpec `json:"spec,omitempty"`
 	Status MemHPAScalerStatus `json:"status,omitempty"`
 }
@@ -39,4 +41,23 @@ type MemHpaList struct {
 	unversioned.TypeMeta `json:",inline"`
 	unversioned.ListMeta `json:"metadata,omitempty"`
 	Items []MemHpa `json:"items"`
+}
+
+func (m *MemHpa) GetObjectKind() unversioned.ObjectKind {
+	return &m.TypeMeta
+}
+
+func (m *MemHpa) GetObjectMeta() meta.Object {
+	return &m.MetaData
+}
+
+type MemHpaCopy MemHpa
+
+func (m *MemHpa) UnmarshalJSON(data []byte) error {
+	tmp := MemHpaCopy{}
+	if err := json.Unmarshal(data, &tmp); nil != err {
+		return err
+	}
+	*m = MemHpa(tmp)
+	return nil
 }

@@ -100,11 +100,11 @@ func (controller *HPAController) newInformer(resyncPeriod time.Duration) {
 
 func (controller *HPAController) reconcile(hpa *memhpav1.MemHpa) {
 	modified := controller.validate(hpa)
-	reference := fmt.Sprintf("%s/%s(%s)", hpa.Spec.ScaleTargetRef.Name, hpa.Namespace,
+	reference := fmt.Sprintf("%s/%s(%s)", hpa.Spec.ScaleTargetRef.Name, hpa.MetaData.Namespace,
 		hpa.Spec.ScaleTargetRef.Kind)
 
 	// get scale subresource
-	scale, err := controller.scaleNamespacer.Scales(hpa.Namespace).Get(hpa.Spec.ScaleTargetRef.Kind,
+	scale, err := controller.scaleNamespacer.Scales(hpa.MetaData.Namespace).Get(hpa.Spec.ScaleTargetRef.Kind,
 		hpa.Spec.ScaleTargetRef.Name)
 	if nil != err {
 		// if validate() modified the hpa, the resource should be updated
@@ -165,7 +165,7 @@ func (controller *HPAController) reconcile(hpa *memhpav1.MemHpa) {
 	if rescale {
 		// update scale subresource to scale
 		scale.Spec.Replicas = desiredReplicas
-		if _, err := controller.scaleNamespacer.Scales(hpa.Namespace).
+		if _, err := controller.scaleNamespacer.Scales(hpa.MetaData.Namespace).
 			Update(hpa.Spec.ScaleTargetRef.Kind, scale); nil != err {
 
 			controller.eventRecorder.Eventf(hpa, api.EventTypeWarning, "FailedRescale",
@@ -176,7 +176,7 @@ func (controller *HPAController) reconcile(hpa *memhpav1.MemHpa) {
 		controller.eventRecorder.Eventf(hpa, api.EventTypeNormal, "SuccessfulRescale", "" +
 			"New size: %d; reason: %s", desiredReplicas, rescaleReason)
 		glog.Infof("Successfull rescale of %s, old size: %d, new size: %d, reason: %s",
-			hpa.Name, currentReplicas, desiredReplicas, rescaleReason)
+			hpa.MetaData.Name, currentReplicas, desiredReplicas, rescaleReason)
 	} else {
 		desiredReplicas = currentReplicas
 	}
@@ -224,12 +224,12 @@ func (controller *HPAController) updateStatus(hpa *memhpav1.MemHpa, current, des
 		*hpa.Status.LastScaleTime = unversioned.NewTime(time.Now())
 	}
 
-	if _, err := controller.hpaNamespacer.Scalers(hpa.Namespace).Update(hpa); nil != err {
+	if _, err := controller.hpaNamespacer.Scalers(hpa.MetaData.Namespace).Update(hpa); nil != err {
 		controller.eventRecorder.Event(hpa, api.EventTypeWarning, "FailedUpdateStatus", err.Error())
 		glog.Errorf("Failed to update mem hpa status: %#v\n", err)
 		return
 	}
-	glog.V(2).Infof("Successfully updated status for %s\n", hpa.Name)
+	glog.V(2).Infof("Successfully updated status for %s\n", hpa.MetaData.Name)
 }
 
 func (controller *HPAController) computeReplicas(hpa *memhpav1.MemHpa, scale *apisv1beta1.Scale) (int32, int32, time.Time, error) {
@@ -251,7 +251,7 @@ func (controller *HPAController) computeReplicas(hpa *memhpav1.MemHpa, scale *ap
 	}
 
 	desiredReplicas, utilization, timestamp, err :=
-		controller.replicaCalc.GetReplicas(currentReplicas, targetUtilization, hpa.Namespace,
+		controller.replicaCalc.GetReplicas(currentReplicas, targetUtilization, hpa.MetaData.Namespace,
 			hpa.Spec.ScaleTargetRef.Name, selector)
 	if nil != err {
 		lastScaleTime := getLastScaleTime(hpa)
@@ -276,7 +276,7 @@ func (controller *HPAController) computeReplicas(hpa *memhpav1.MemHpa, scale *ap
 func getLastScaleTime(hpa *memhpav1.MemHpa) time.Time {
 	lastTime := hpa.Status.LastScaleTime
 	if nil == lastTime {
-		lastTime = &hpa.CreationTimestamp
+		lastTime = &hpa.MetaData.CreationTimestamp
 	}
 	return lastTime.Time
 }
