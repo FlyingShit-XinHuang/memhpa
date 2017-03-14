@@ -28,7 +28,7 @@ Some parameters can be used to specify Prometheus Service:
 A [3rd party resource](https://kubernetes.io/docs/user-guide/thirdpartyresources/) is created to define the 
 memory-based HPA resource. It was defined similarly with K8S HorizontalPodAutoscaler:
 
-```
+```go
 type MemHpa struct {
 	unversioned.TypeMeta `json:",inline"`
 	// There is a bug when using 3rd party resources: https://github.com/kubernetes/client-go/issues/8
