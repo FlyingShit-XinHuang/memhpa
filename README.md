@@ -1,11 +1,13 @@
 # Horizontal pod autoscaler through memory
 
-## Query K8S API
+## Design proposals
+
+### Query K8S API
 
 This HPA is designed to run in a pod (in "kube-system" namespace) in K8S cluster. The service account will be used to 
 access K8S API.
 
-## Pull metrics
+### Pull metrics
 
 Memory metrics are pulled from Prometheus which should be deployed in the cluster and expose its service with K8S Service.
 Some parameters can be used to specify Prometheus Service:
@@ -21,7 +23,7 @@ Some parameters can be used to specify Prometheus Service:
         Scheme of Prometheus service (default "http")
 ```
 
-## HPA resources
+### HPA resources
 
 A [3rd party resource](https://kubernetes.io/docs/user-guide/thirdpartyresources/) is created to define the 
 memory-based HPA resource. It was defined similarly with K8S HorizontalPodAutoscaler:
@@ -60,7 +62,7 @@ type MemHpaList struct {
 
 The client package in the project can be used to query the MemHpa resource
 
-## Autoscaling Algorithm
+### Autoscaling Algorithm
 
 It is similar with [K8S Horizontal Pod Autoscaling](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/horizontal-pod-autoscaler.md).
 
@@ -72,3 +74,31 @@ following conditions:
 
 .spec.scaleTargetRef is used to fetch Pods and Scale subresource of the referenced pod controller. Pods are used to 
 calculate sum of memory limits by which sum of metrics is divided to get utilization. 
+
+## How to run
+
+### Build
+
+Docker must be installed in your environment. Then just run:
+ 
+```
+make docker-build
+```
+
+Then the image will be built. If you want to specify another image name:
+
+```
+make IMAGE=your-image-name docker-build
+```
+
+Run the following command to build and push image:
+
+```
+make push
+```
+
+### Run in K8S
+
+You can use [deployment-in-cluster.yaml](k8s-compose/demo/deployment-in-cluster.yaml) to run this memory-based HPA 
+controller in a K8S Deployment and create a MemHpa resource with [memhpa-demo.yaml](k8s-compose/demo/memhpa-demo.yaml)
+to reference your pod controller

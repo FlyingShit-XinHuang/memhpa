@@ -1,4 +1,4 @@
-IMAGE = 192.168.1.113/huangxin/tenx-hpa
+IMAGE?=flyingshit/mem-hpa
 
 docker-build:
 	docker build -t $(IMAGE) .
@@ -6,4 +6,4 @@ docker-build:
 push: docker-build
 	docker push $(IMAGE)
 
-.PHONY: dev push-dev
+.PHONY: docker-build push

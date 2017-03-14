@@ -16,7 +16,7 @@ spec:
         name: mem-hpa
     spec:
       containers:
-      - image: 192.168.1.113/huangxin/tenx-hpa-dev # Modify this image according to your environment
+      - image: flyingshit/mem-hpa # Modify this image according to your environment
         args:
         - "--prom-name=prometheus-monitor" # Modify this according to your Prometheus Service
         - "--logtostderr=true"
