@@ -1,9 +1,9 @@
-DEV_IMAGE = 192.168.1.113/huangxin/tenx-hpa-dev
+IMAGE = 192.168.1.113/huangxin/tenx-hpa
 
-dev:
-	docker build -f Dockerfile.dev -t $(DEV_IMAGE) .
+docker-build:
+	docker build -t $(IMAGE) .
 
-push-dev: dev
-	docker push $(DEV_IMAGE)
+push: docker-build
+	docker push $(IMAGE)
 
 .PHONY: dev push-dev

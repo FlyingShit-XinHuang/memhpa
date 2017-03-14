@@ -1,0 +1,12 @@
+apiVersion: xinhuang.com/v1
+kind: MemHpa
+metadata:
+  namespace: huangxin
+  name: hpatest
+spec:
+  minReplicas: 1
+  maxReplicas: 5
+  targetUtilizationPercentage: 50
+  scaleTargetRef: # Modify the pod controller kind and name according to your resource
+    kind: Deployment
+    name: hpatest

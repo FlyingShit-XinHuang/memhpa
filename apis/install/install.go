@@ -5,8 +5,6 @@ import (
 
 	"memhpa/apis/v1"
 	
-	"github.com/golang/glog"
-	
 	"k8s.io/client-go/1.4/pkg/api/meta"
 	"k8s.io/client-go/1.4/pkg/api/unversioned"
 	"k8s.io/client-go/1.4/pkg/runtime"
@@ -29,19 +27,19 @@ func init() {
 		}
 	}
 	if len(externalVersions) == 0 {
-		glog.Infof("No version is registered for group %v", v1.MemHPAResourcesGroup)
+		fmt.Printf("No version is registered for group %v", v1.MemHPAResourcesGroup)
 		return
 	}
 
 	if err := registered.EnableVersions(externalVersions...); nil != err {
-		glog.Warningf("Cannot enable versions %v: %#v\n", externalVersions, err)
+		fmt.Printf("Warning - Cannot enable versions %v: %#v\n", externalVersions, err)
 		return
 	}
 	if err := enableVersions(externalVersions); nil != err {
-		glog.Warningf("Cannot enable versions %v: %#v\n", externalVersions, err)
+		fmt.Printf("Warning - Cannot enable versions %v: %#v\n", externalVersions, err)
 		return
 	}
-	glog.Infof("Installed versions: %v\n", externalVersions)
+	fmt.Printf("Installed versions: %v\n", externalVersions)
 }
 
 func enableVersions(externalVersions []unversioned.GroupVersion) error {

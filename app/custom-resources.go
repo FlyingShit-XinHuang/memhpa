@@ -13,8 +13,6 @@ import (
 	"k8s.io/client-go/1.4/pkg/api/errors"
 )
 
-const customResourceName = "mem-hpa.tenxcloud.com"
-
 // Create custom resource if doesn't exist
 func CreateMemHPAResourceGroup(getter v1beta1.ThirdPartyResourcesGetter) error {
 	_, err := getter.ThirdPartyResources().Get(v1.MemHPAResourcesMetaName)

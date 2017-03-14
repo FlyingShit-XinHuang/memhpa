@@ -53,12 +53,6 @@ func main() {
 	// get client to query custom resources
 	scaleClient := client.NewForConfigOrDie(config)
 
-	//list, _ := scaleClient.Scalers("huangxin").List(api.ListOptions{})
-	//glog.Infof("list mem hpa: %#v\n", list)
-	//hpalist, _ := cs.Autoscaling().HorizontalPodAutoscalers("zaizai").List(api.ListOptions{})
-	//glog.Infof("list hpa: %#v\n", hpalist)
-	//h, _ := scaleClient.Scalers("huangxin").Get("hpatest")
-
 	// get client to query Prometheus
 	metricsClient := metrics.NewInClusterPromClientOrDie(promSvcScheme, promSvcNamespace, promSvcName, promSvcPort)
 

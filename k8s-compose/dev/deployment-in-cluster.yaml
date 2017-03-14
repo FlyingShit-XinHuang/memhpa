@@ -1,22 +1,24 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: tenx-hpa-dev
+  name: mem-hpa
   namespace: kube-system
   labels:
-    name: tenx-hpa-dev
+    name: mem-hpa
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: tenx-hpa-dev
+      name: mem-hpa
   template:
     metadata:
       labels:
-        name: tenx-hpa-dev
+        name: mem-hpa
     spec:
       containers:
-      - image: 192.168.1.113/huangxin/tenx-hpa-dev
-        command: ["go", "run", "hpa.go"]
+      - image: 192.168.1.113/huangxin/tenx-hpa-dev # Modify this image according to your environment
+        args:
+        - "--prom-name=prometheus-monitor" # Modify this according to your Prometheus Service
+        - "--logtostderr=true"
         name: hpa-controller
         imagePullPolicy: Always

@@ -9,14 +9,16 @@ import (
 )
 
 const (
-	MemHPAResourcesGroup = "tenxcloud.com"
+	MemHPAResourcesGroup = "xinhuang.com"
 	MemHPAResourcesName = "memhpas"
 	MemHPAResourcesVersion = "v1"
-	MemHPAResourcesMetaName = "mem-hpa.tenxcloud.com"
+	MemHPAResourcesMetaName = "mem-hpa.xinhuang.com"
 )
 
 type MemHpa struct {
 	unversioned.TypeMeta `json:",inline"`
+	// There is a bug when using 3rd party resources: https://github.com/kubernetes/client-go/issues/8
+	// so ObjectMeta was combined not embedded
 	MetaData v1.ObjectMeta `json:"metadata,omitempty"`
 	Spec MemHPASpec `json:"spec,omitempty"`
 	Status MemHPAScalerStatus `json:"status,omitempty"`
@@ -43,14 +45,18 @@ type MemHpaList struct {
 	Items []MemHpa `json:"items"`
 }
 
+// Implement runtime.Object interface
 func (m *MemHpa) GetObjectKind() unversioned.ObjectKind {
 	return &m.TypeMeta
 }
 
+// Implement meta.ObjectMetaAccessor interface
 func (m *MemHpa) GetObjectMeta() meta.Object {
 	return &m.MetaData
 }
 
+// Workaround for decoding 3rd party resource.
+// Define a copy type so that the call of json.Unmarshal cannot cause an endless loop
 type MemHpaCopy MemHpa
 
 func (m *MemHpa) UnmarshalJSON(data []byte) error {

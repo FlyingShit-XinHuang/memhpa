@@ -109,8 +109,7 @@ func (controller *HPAController) reconcile(hpa *memhpav1.MemHpa) {
 	if nil != err {
 		// if validate() modified the hpa, the resource should be updated
 		if modified {
-			controller.updateStatus(hpa, hpa.Status.CurrentReplicas, hpa.Status.DesiredReplicas,
-				hpa.Status.CurrentUtilizationPercentage, false)
+			controller.update(hpa)
 		}
 		glog.Errorf("Failed to get scale subresource of %s: %v\n", reference, err)
 		return
@@ -212,7 +211,15 @@ func getScaleUpLimit(currentReplicas int32) int32 {
 	return int32(math.Max(scaleUpLimitFactor * float64(currentReplicas), scaleUpLimitMinimum))
 }
 
+func (controller *HPAController) update(hpa *memhpav1.MemHpa) {
+	if _, err := controller.hpaNamespacer.Scalers(hpa.MetaData.Namespace).Update(hpa); nil != err {
+		glog.Errorf("Failed to update mem hpa: %#v\n", err)
+	}
+}
+
 func (controller *HPAController) updateStatus(hpa *memhpav1.MemHpa, current, desired, utilization int32, rescale bool) {
+	modified := hpa.Status.CurrentUtilizationPercentage != utilization || hpa.Status.CurrentReplicas != current ||
+		hpa.Status.DesiredReplicas != desired
 	hpa.Status = memhpav1.MemHPAScalerStatus{
 		CurrentReplicas: current,
 		DesiredReplicas: desired,
@@ -221,15 +228,23 @@ func (controller *HPAController) updateStatus(hpa *memhpav1.MemHpa, current, des
 	}
 
 	if rescale {
+		modified = true
+		if nil == hpa.Status.LastScaleTime {
+			hpa.Status.LastScaleTime = &unversioned.Time{}
+		}
 		*hpa.Status.LastScaleTime = unversioned.NewTime(time.Now())
 	}
 
-	if _, err := controller.hpaNamespacer.Scalers(hpa.MetaData.Namespace).Update(hpa); nil != err {
-		controller.eventRecorder.Event(hpa, api.EventTypeWarning, "FailedUpdateStatus", err.Error())
-		glog.Errorf("Failed to update mem hpa status: %#v\n", err)
-		return
+	if modified {
+		if _, err := controller.hpaNamespacer.Scalers(hpa.MetaData.Namespace).Update(hpa); nil != err {
+			controller.eventRecorder.Event(hpa, api.EventTypeWarning, "FailedUpdateStatus", err.Error())
+			glog.Errorf("Failed to update mem hpa status: %#v\n", err)
+			return
+		}
+		glog.V(2).Infof("Successfully updated status for %s\n", hpa.MetaData.Name)
+	} else {
+		glog.V(2).Infoln("There is no need to update mem hpa")
 	}
-	glog.V(2).Infof("Successfully updated status for %s\n", hpa.MetaData.Name)
 }
 
 func (controller *HPAController) computeReplicas(hpa *memhpav1.MemHpa, scale *apisv1beta1.Scale) (int32, int32, time.Time, error) {
